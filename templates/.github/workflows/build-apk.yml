@@ -1,0 +1,69 @@
+name: Build Android package
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install native dependencies
+        run: sudo apt-get update && sudo apt-get install --yes libvips42
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: yarn
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install Android SDK packages
+        run: |
+          sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          test -n "$sdk_root"
+          sdkmanager="$(find "$sdk_root/cmdline-tools" -type f -name sdkmanager -print -quit)"
+          test -x "$sdkmanager"
+          yes | "$sdkmanager" --sdk_root="$sdk_root" --licenses >/dev/null || true
+          "$sdkmanager" --sdk_root="$sdk_root" \
+            "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Add Android build tools to PATH
+        run: echo "$ANDROID_HOME/build-tools/36.0.0" >> "$GITHUB_PATH"
+
+      - name: Install JavaScript dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Prepare Android signing key
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          test -n "$ANDROID_KEYSTORE_BASE64"
+          mkdir -p config/packages
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > config/packages/repebox-release.keystore
+
+      - name: Build signed APK
+        env:
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        run: bundle exec rake capacitor:build:apk
+
+      - name: Upload Android package
+        uses: actions/upload-artifact@v6
+        with:
+          name: repebox-apk
+          path: public/*.apk
+          if-no-files-found: error

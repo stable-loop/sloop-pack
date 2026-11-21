@@ -1,0 +1,116 @@
+# sloop-pack
+
+Rails packaging tasks for Electron, Tauri and Capacitor applications.
+
+## Installation
+
+Add `gem "sloop-pack"` to the Gemfile, run `bundle install`, then run:
+
+```bash
+sloop-pack init
+```
+
+The initializer installs `config/packages/config.rb` and the GitHub workflows.
+Package views remain inside the gem and are never copied into the application.
+Existing files are never overwritten.
+
+Package templates are rendered into the configured `rendered_directory` (normally
+`tmp/packages/`) using the values in the consuming project's
+`config/packages/config.rb`. The Android signing keystore remains in the
+consuming project.
+
+## Electron
+
+Electron packages use Chromium and open the hosted application. After installing
+the JavaScript dependencies, build locally with:
+
+```bash
+bundle exec rake electron:build:deb
+bundle exec rake electron:build:win
+bundle exec rake electron:build:mac
+```
+
+Electron builds use `tmp/electron/` and copy the resulting package to `public/`.
+The Electron profile is separate from the browser profile and persists cookies,
+Service Worker cache and IndexedDB data between launches.
+
+GitHub Actions builds can be started and downloaded locally with:
+
+```bash
+bundle exec rake github:build:deb
+bundle exec rake github:build:win
+bundle exec rake github:build:mac
+```
+
+These tasks require an authenticated GitHub CLI (`gh auth login`) and invoke the
+corresponding manually triggered workflow.
+
+## Tauri
+
+Tauri is a lightweight alternative to Electron using the operating system
+WebView instead of bundling Chromium:
+
+```bash
+bundle exec rake tauri:build:deb
+bundle exec rake tauri:build:win
+bundle exec rake tauri:build:mac
+```
+
+Tauri requires Rust, Cargo, the Tauri CLI and the platform WebView prerequisites.
+Build files are generated under `tmp/tauri/` and packages are copied to `public/`.
+Windows and macOS builds require their native toolchains or a CI runner.
+
+## Capacitor
+
+Build a signed Android APK locally with:
+
+```bash
+cp /path/to/repebox.keystore config/packages/repebox-release.keystore
+bundle exec rake capacitor:build:apk
+```
+
+The Android project is generated under `tmp/android/`. The release APK is signed
+with `zipalign` and `apksigner`, which must be available on `PATH`, and copied to
+`public/`. The launcher icon is generated from `public/icon_mobile.png`.
+
+Signing values are read from the package configuration, normally backed by Rails
+credentials:
+
+- `android_keystore_password`
+- `android_key_alias`
+- `android_key_password`
+
+To generate a new keystore using those configured passwords, run:
+
+```bash
+bundle exec rake g:keystore
+```
+
+The command stores the keystore under `config/packages/` and prints the values
+needed to configure local builds and GitHub Actions. Keep the keystore and its
+passwords secure.
+
+The Android package can also be built on GitHub Actions and downloaded locally:
+
+```bash
+bundle exec rake github:build:apk
+```
+
+The Android workflow requires the `RAILS_MASTER_KEY` and
+`ANDROID_KEYSTORE_BASE64` repository secrets.
+
+For Google sign-in, create an Android OAuth client for the application's package
+ID and add the SHA-1 fingerprint of the signing certificate. The existing web
+OAuth client ID is still required by the application.
+
+## Other tasks
+
+Upload a local package to the configured public S3 bucket:
+
+```bash
+bundle exec rake package:upload[file]
+```
+
+GitHub workflow files are installed into the consuming repository because GitHub
+only detects workflows under `.github/workflows/`. The workflow source templates
+remain packaged inside `sloop-pack`.

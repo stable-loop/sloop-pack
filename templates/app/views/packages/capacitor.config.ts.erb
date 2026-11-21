@@ -1,0 +1,16 @@
+import type { CapacitorConfig } from "@capacitor/cli";
+
+const config: CapacitorConfig = {
+  appId: "<%= config.fetch(:capacitor).fetch(:app_id) %>",
+  appName: "<%= config.fetch(:capacitor).fetch(:app_name) %>",
+  webDir: "<%= config.fetch(:capacitor).fetch(:web_dir) %>",
+  android: {
+    path: "<%= config.fetch(:capacitor).fetch(:android_path) %>"
+  },
+  server: {
+    url: "<%= config.fetch(:capacitor).fetch(:app_url) %>",
+    cleartext: false
+  }
+};
+
+export default config;

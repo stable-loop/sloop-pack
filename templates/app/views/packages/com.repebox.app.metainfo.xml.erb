@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id><%= config.fetch(:electron).fetch(:product_id) %></id>
+  <name><%= config.fetch(:electron).fetch(:app_name) %></name>
+  <metadata_license>CC0-1.0</metadata_license>
+  <summary><%= config.fetch(:electron).fetch(:summary) %></summary>
+  <description>
+    <p><%= config.fetch(:electron).fetch(:description) %></p>
+  </description>
+  <developer>
+    <name><%= config.fetch(:electron).fetch(:developer) %></name>
+  </developer>
+  <launchable type="desktop-id"><%= config.fetch(:electron).fetch(:product_tag) %>.desktop</launchable>
+  <icon type="stock"><%= config.fetch(:electron).fetch(:product_tag) %></icon>
+  <provides>
+    <binary><%= config.fetch(:electron).fetch(:product_tag) %></binary>
+  </provides>
+  <categories>
+    <category>Utility</category>
+  </categories>
+  <url type="homepage"><%= config.fetch(:electron).fetch(:app_url) %></url>
+</component>
