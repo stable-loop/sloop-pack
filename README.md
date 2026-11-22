@@ -17,9 +17,11 @@ Then run:
 sloop-pack init
 ```
 
-The initializer installs `config/packages/config.rb` and the GitHub workflows.
+The initializer installs `config/packages/config.rb`, the root
+`capacitor.config.ts` wrapper and the GitHub workflows. It also adds the
+required packaging scripts, dependencies and build paths to `package.json`.
 Package views remain inside the gem and are never copied into the application.
-Existing files are never overwritten.
+Existing files and package scripts are never overwritten.
 
 Package templates are rendered into the configured `rendered_directory` (normally
 `tmp/packages/`) using the values in the consuming project's
