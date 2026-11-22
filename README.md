@@ -1,6 +1,6 @@
 # sloop-pack
 
-Rails packaging tasks for Electron, Tauri and Capacitor applications.
+Rails packaging tasks for Electron, Tauri and Capacitor applications. This gem generates the necessary build files and packages for Debian, Windows, Mac and Android, and provides tasks to upload the resulting packages to S3. Also included are GitHub Actions workflows to build and upload packages on demand.
 
 ## Installation
 
@@ -114,3 +114,11 @@ bundle exec rake package:upload[file]
 GitHub workflow files are installed into the consuming repository because GitHub
 only detects workflows under `.github/workflows/`. The workflow source templates
 remain packaged inside `sloop-pack`.
+
+## Development
+
+Run the test suite with:
+
+```bash
+bundle exec rspec
+```

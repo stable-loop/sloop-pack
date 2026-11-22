@@ -15,4 +15,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "aws-sdk-s3"
   spec.add_dependency "marcel"
   spec.add_dependency "railties", ">= 7.0"
+  spec.add_development_dependency "rspec", ">= 3.13"
 end
