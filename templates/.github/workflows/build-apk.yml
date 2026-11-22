@@ -64,6 +64,6 @@ jobs:
       - name: Upload Android package
         uses: actions/upload-artifact@v6
         with:
-          name: repebox-apk
+          name: pack-apk
           path: public/*.apk
           if-no-files-found: error

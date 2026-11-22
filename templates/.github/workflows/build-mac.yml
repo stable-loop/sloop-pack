@@ -32,6 +32,6 @@ jobs:
       - name: Upload macOS package
         uses: actions/upload-artifact@v6
         with:
-          name: repebox-mac
+          name: pack-mac
           path: public/*.dmg
           if-no-files-found: error

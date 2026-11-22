@@ -32,6 +32,6 @@ jobs:
       - name: Upload Windows package
         uses: actions/upload-artifact@v6
         with:
-          name: repebox-win
+          name: pack-win
           path: public/*.exe
           if-no-files-found: error

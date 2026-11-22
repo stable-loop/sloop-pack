@@ -5,7 +5,7 @@ class Package::GithubBuilder
 
   def build
     run_id = github_runner.run
-    puts "GitHub Actions: downloading repebox-#{@platform}..."
+    puts "GitHub Actions: downloading pack-#{@platform}..."
     package_file = github_downloader.download(run_id)
     Package::Copier.new.copy_to_s3(package_file)
   end
