@@ -9,8 +9,8 @@ class Package::Capacitor::Signer
     output_dir = Rails.root.join("tmp", "capacitor")
     FileUtils.rm_rf(output_dir)
     FileUtils.mkdir_p(output_dir)
-    aligned_file = output_dir.join("repebox-aligned.apk")
-    signed_file = output_dir.join("repebox.apk")
+    aligned_file = output_dir.join("#{key_alias}-aligned.apk")
+    signed_file = output_dir.join("#{key_alias}.apk")
 
     sh "zipalign", "-f", "4", package_file, aligned_file.to_s
     with_password_files(output_dir) do |keystore_password_file, key_password_file|
