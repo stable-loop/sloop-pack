@@ -4,14 +4,14 @@ This gem generates the necessary build files and packages for Debian, Windows, M
 
 ## Installation
 
-Add `gem "sloop-pack"` to the Gemfile:
+Add `sloop-pack` to the Gemfile:
 
 ```ruby
-gem "sloop-pack", github: "stable-loop/sloop-pack"
+gem "sloop-pack", git: "git@github.com:stable-loop/sloop-pack.git"
 ```
-Run `bundle install`, then run:
-```
-Then run:
+
+Run `bundle install`, then initialize the packaging files and install the
+JavaScript dependencies:
 
 ```bash
 sloop-pack init
@@ -98,6 +98,13 @@ bundle exec rake g:keystore
 The command stores the keystore under `config/packages/` and prints the values
 needed to configure local builds and GitHub Actions. Keep the keystore and its
 passwords secure.
+
+Export the keystore as the GitHub Actions secret required by the Android
+workflow:
+
+```bash
+base64 -w 0 config/packages/repebox-release.keystore | gh secret set ANDROID_KEYSTORE_BASE64
+```
 
 The Android package can also be built on GitHub Actions and downloaded locally:
 

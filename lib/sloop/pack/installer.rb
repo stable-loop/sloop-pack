@@ -14,7 +14,7 @@ module Sloop
         install_file("config/packages/config.rb")
         install_file("capacitor.config.ts")
         install_tree(".github/workflows")
-        update_package_json
+        install_javascript_dependencies if update_package_json
       end
 
       private
@@ -44,10 +44,13 @@ module Sloop
         path = File.join(@destination, "package.json")
         unless File.file?(path)
           puts "Skipping package.json (file does not exist)"
-          return
+          return false
         end
 
         package = JSON.parse(File.read(path))
+        package["name"] ||= File.basename(@destination).downcase.gsub(/[^a-z0-9._-]+/, "-")
+        package["version"] ||= "1.0.0"
+        package["author"] = default_author(package)
         package["main"] ||= "tmp/packages/main.js"
         package["scripts"] ||= {}
         package["scripts"].merge!(
@@ -67,7 +70,8 @@ module Sloop
           "@capacitor/core" => "^8.6.2",
           "@tauri-apps/cli" => "^2.12.6",
           "electron" => "^39.2.7",
-          "electron-builder" => "^26.0.12"
+          "electron-builder" => "^26.0.12",
+          "typescript" => "^5.9.3"
         ) { |_key, existing, _default| existing }
         package["build"] ||= {}
         package["build"]["directories"] ||= { "output" => "tmp/electron" }
@@ -79,8 +83,30 @@ module Sloop
 
         File.write(path, "#{JSON.pretty_generate(package)}\n")
         puts "Updated package.json"
+        true
       rescue JSON::ParserError => error
         abort "Could not parse package.json: #{error.message}"
+      end
+
+      def install_javascript_dependencies
+        puts "Installing JavaScript dependencies with yarn..."
+        success = Dir.chdir(@destination) { system("yarn", "install") }
+        abort "Could not install JavaScript dependencies with yarn" unless success
+      end
+
+      def default_author(package)
+        author = package["author"]
+        if author.is_a?(Hash)
+          author["name"] ||= package["name"]
+          author["email"] ||= "#{package["name"]}@example.com"
+          return author
+        end
+        return author unless author.nil?
+
+        {
+          "name" => package["name"],
+          "email" => "#{package["name"]}@example.com"
+        }
       end
     end
   end
