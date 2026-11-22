@@ -1,10 +1,17 @@
 # sloop-pack
 
-Rails packaging tasks for Electron, Tauri and Capacitor applications. This gem generates the necessary build files and packages for Debian, Windows, Mac and Android, and provides tasks to upload the resulting packages to S3. Also included are GitHub Actions workflows to build and upload packages on demand.
+This gem generates the necessary build files and packages for Debian, Windows, Mac and Android, and provides tasks to upload the resulting packages to S3. Also included are GitHub Actions workflows to build and upload packages on demand.
 
 ## Installation
 
-Add `gem "sloop-pack"` to the Gemfile, run `bundle install`, then run:
+Add `gem "sloop-pack"` to the Gemfile:
+
+```ruby
+gem "sloop-pack", github: "stable-loop/sloop-pack"
+```
+Run `bundle install`, then run:
+```
+Then run:
 
 ```bash
 sloop-pack init
