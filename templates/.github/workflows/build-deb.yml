@@ -32,7 +32,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build .deb
-        run: bundle exec rake tauri:build:deb
+        run: bundle exec rake electron:build:deb
 
       - name: Upload Debian package
         uses: actions/upload-artifact@v6

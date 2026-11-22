@@ -27,7 +27,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build macOS package
-        run: bundle exec rake tauri:build:mac
+        run: bundle exec rake electron:build:mac
 
       - name: Upload macOS package
         uses: actions/upload-artifact@v6

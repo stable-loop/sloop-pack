@@ -27,7 +27,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build Windows package
-        run: bundle exec rake tauri:build:win
+        run: bundle exec rake electron:build:win
 
       - name: Upload Windows package
         uses: actions/upload-artifact@v6

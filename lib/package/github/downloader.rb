@@ -8,7 +8,7 @@ class Package::Github::Downloader
   end
 
   def download(run_id)
-    artifact = "repebox-#{@platform}"
+    artifact = "pack-#{@platform}"
     extension = Package::EXTENSIONS[@platform]
 
     download_dir = Rails.root.join("tmp", "github-#{@platform}")
