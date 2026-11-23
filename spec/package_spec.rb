@@ -2,7 +2,7 @@
 
 describe Package do
   describe '.downloads' do
-    it 'builds download metadata from the package and S3 configuration' do
+    it 'builds download metadata from package and S3 configuration' do
       downloads = described_class.downloads
       s3_config = Package::CONFIG.fetch(:s3)
       base_url = "#{s3_config.fetch(:endpoint).sub('://', "://#{s3_config.fetch(:bucket)}.")}/"

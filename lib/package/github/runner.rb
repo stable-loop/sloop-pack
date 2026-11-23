@@ -36,22 +36,34 @@ module Package
 
       def find_run(workflow, started_at)
         20.times do
-          runs = JSON.parse(
-            `gh run list --workflow #{workflow} --branch #{BRANCH} --event workflow_dispatch --limit 10 --json databaseId,createdAt`
-          )
-          run = runs.find { |candidate| Time.iso8601(candidate.fetch('createdAt')) >= started_at }
+          run = find_matching_run(workflow, started_at)
           if run
             puts
             return run.fetch('databaseId')
           end
-
-          print '.'
-          $stdout.flush
-          sleep 3
+          wait_for_run
         end
         puts
 
         abort 'Could not find the GitHub Actions run'
+      end
+
+      def find_matching_run(workflow, started_at)
+        runs_json = IO.popen(
+          [
+            'gh', 'run', 'list', '--workflow', workflow, '--branch', BRANCH,
+            '--event', 'workflow_dispatch', '--limit', '10', '--json', 'databaseId,createdAt'
+          ],
+          &:read
+        )
+        runs = JSON.parse(runs_json)
+        runs.find { |candidate| Time.iso8601(candidate.fetch('createdAt')) >= started_at }
+      end
+
+      def wait_for_run
+        print '.'
+        $stdout.flush
+        sleep 3
       end
 
       def watch_run(run_id)

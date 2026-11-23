@@ -21,17 +21,20 @@ module Package
     s3_config = CONFIG.fetch(:s3)
     base_url = "#{s3_config.fetch(:endpoint).sub('://', "://#{s3_config.fetch(:bucket)}.")}/"
 
-    EXTENSIONS.map do |_builder_platform, format|
-      filename = "#{CONFIG.fetch(:tag)}.#{format.fetch(:extension)}"
-      key = "#{s3_config.fetch(:prefix)}#{filename}"
-      {
-        platform: format.fetch(:download_platform),
-        icon: format.fetch(:icon),
-        filename: filename,
-        url: "#{base_url}#{URI::DEFAULT_PARSER.escape(key)}"
-      }.freeze
-    end.freeze
+    EXTENSIONS.map { |_builder_platform, format| download_package(format, s3_config, base_url) }.freeze
   end
+
+  def self.download_package(format, s3_config, base_url)
+    filename = "#{CONFIG.fetch(:tag)}.#{format.fetch(:extension)}"
+    key = "#{s3_config.fetch(:prefix)}#{filename}"
+    {
+      platform: format.fetch(:download_platform),
+      icon: format.fetch(:icon),
+      filename: filename,
+      url: "#{base_url}#{URI::DEFAULT_PARSER.escape(key)}"
+    }.freeze
+  end
+  private_class_method :download_package
 
   DOWNLOAD_PACKAGES = Package.downloads
 end

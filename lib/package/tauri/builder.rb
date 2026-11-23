@@ -10,18 +10,8 @@ module Package
       end
 
       def build
-        Bundler.with_unbundled_env do
-          with_target_directory do
-            sh 'node', tauri_cli,
-               'build', '--config', 'tauri.conf.json', '--bundles', Package::Tauri::BUNDLES.fetch(@platform)
-          end
-        end
-        Package::Finder.new(
-          directory: target_directory.join(
-            'release', 'bundle', Package::Tauri::BUNDLES.fetch(@platform)
-          ),
-          pattern: "*.#{Package::EXTENSIONS.fetch(@platform).fetch(:extension)}"
-        ).find
+        Bundler.with_unbundled_env { with_target_directory { build_tauri } }
+        find_package
       end
 
       private
@@ -31,20 +21,29 @@ module Package
       def project_directory = Rails.root.join(tauri_config.fetch(:project_directory)).to_s
       def target_directory = Rails.root.join(tauri_config.fetch(:target_directory))
 
+      def build_tauri
+        sh 'node', tauri_cli,
+           'build', '--config', 'tauri.conf.json', '--bundles', Package::Tauri::BUNDLES.fetch(@platform)
+      end
+
+      def find_package
+        bundle_directory = target_directory.join('release', 'bundle', Package::Tauri::BUNDLES.fetch(@platform))
+        extension = Package::EXTENSIONS.fetch(@platform).fetch(:extension)
+        Package::Finder.new(directory: bundle_directory, pattern: "*.#{extension}").find
+      end
+
       def with_target_directory(&block)
-        original_target_directory = ENV['CARGO_TARGET_DIR']
-        original_path = ENV['PATH']
+        original_environment = { 'CARGO_TARGET_DIR' => ENV['CARGO_TARGET_DIR'], 'PATH' => ENV['PATH'] }
         ENV['CARGO_TARGET_DIR'] = target_directory.to_s
-        cargo_bin = File.expand_path('~/.cargo/bin')
-        ENV['PATH'] = "#{cargo_bin}:#{original_path}" if File.directory?(cargo_bin)
+        add_cargo_to_path
         Dir.chdir(project_directory, &block)
       ensure
-        if original_target_directory
-          ENV['CARGO_TARGET_DIR'] = original_target_directory
-        else
-          ENV.delete('CARGO_TARGET_DIR')
-        end
-        ENV['PATH'] = original_path
+        original_environment.each { |key, value| ENV[key] = value }
+      end
+
+      def add_cargo_to_path
+        cargo_bin = File.expand_path('~/.cargo/bin')
+        ENV['PATH'] = "#{cargo_bin}:#{ENV['PATH']}" if File.directory?(cargo_bin)
       end
     end
   end

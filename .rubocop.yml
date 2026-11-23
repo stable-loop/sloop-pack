@@ -1,0 +1,31 @@
+plugins:
+  - rubocop-performance
+  - rubocop-rspec
+
+AllCops:
+  NewCops: disable
+  Exclude:
+    - lib/sloop-pack.rb
+
+Metrics/BlockLength:
+  Exclude:
+    - Guardfile
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/MethodLength:
+  Max: 15
+
+Style/Documentation:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Exclude:
+    - spec/tasks/package_tasks_spec.rb
+
+RSpec/ExampleLength:
+  Max: 25
+
+RSpec/MultipleExpectations:
+  Max: 5

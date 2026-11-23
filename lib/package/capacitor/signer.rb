@@ -9,25 +9,12 @@ module Package
 
       def sign(package_file)
         validate_configuration
-
-        output_dir = Rails.root.join('tmp', 'capacitor')
-        FileUtils.rm_rf(output_dir)
-        FileUtils.mkdir_p(output_dir)
+        output_dir = prepare_output_directory
         aligned_file = output_dir.join("#{key_alias}-aligned.apk")
         signed_file = output_dir.join("#{key_alias}.apk")
 
-        sh 'zipalign', '-f', '4', package_file, aligned_file.to_s
-        with_password_files(output_dir) do |keystore_password_file, key_password_file|
-          sh 'apksigner', 'sign',
-             '--ks', keystore_path,
-             '--ks-pass', "file:#{keystore_password_file}",
-             '--key-pass', "file:#{key_password_file}",
-             '--ks-key-alias', key_alias,
-             '--out', signed_file.to_s,
-             aligned_file.to_s
-          sh 'apksigner', 'verify', signed_file.to_s
-        end
-
+        align_package(package_file, aligned_file)
+        sign_package(output_dir, aligned_file, signed_file)
         signed_file.to_s
       end
 
@@ -46,6 +33,30 @@ module Package
       def keystore_password = capacitor_config.fetch(:keystore_password).to_s
       def key_password = capacitor_config.fetch(:keystore_key_password).to_s
       def keystore_filename = capacitor_config.fetch(:keystore_filename)
+
+      def prepare_output_directory
+        output_dir = Rails.root.join('tmp', 'capacitor')
+        FileUtils.rm_rf(output_dir)
+        FileUtils.mkdir_p(output_dir)
+        output_dir
+      end
+
+      def align_package(package_file, aligned_file)
+        sh 'zipalign', '-f', '4', package_file, aligned_file.to_s
+      end
+
+      def sign_package(output_dir, aligned_file, signed_file)
+        with_password_files(output_dir) do |keystore_password_file, key_password_file|
+          sh 'apksigner', 'sign',
+             '--ks', keystore_path,
+             '--ks-pass', "file:#{keystore_password_file}",
+             '--key-pass', "file:#{key_password_file}",
+             '--ks-key-alias', key_alias,
+             '--out', signed_file.to_s,
+             aligned_file.to_s
+          sh 'apksigner', 'verify', signed_file.to_s
+        end
+      end
 
       def with_password_files(directory)
         keystore_password_file = directory.join('keystore-password')

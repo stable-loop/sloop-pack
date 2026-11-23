@@ -50,22 +50,48 @@ module Sloop
         end
 
         package = JSON.parse(File.read(path))
+        update_package_metadata(package)
+        update_package_scripts(package)
+        update_package_dependencies(package)
+        update_package_build(package)
+
+        File.write(path, "#{JSON.pretty_generate(package)}\n")
+        puts 'Updated package.json'
+        true
+      rescue JSON::ParserError => e
+        abort "Could not parse package.json: #{e.message}"
+      end
+
+      def update_package_metadata(package)
         package_config
         package['name'] = File.basename(@destination).downcase.gsub(/[^a-z0-9._-]+/, '-')
         package['version'] ||= '1.0.0'
         package['description'] ||= Package::CONFIG.fetch(:description)
         package['author'] = default_author(package)
         package['main'] ||= 'tmp/packages/main.js'
+      end
+
+      def update_package_scripts(package)
         package['scripts'] ||= {}
-        package['scripts'].merge!(
+        package['scripts'].merge!(package_scripts) { |_key, existing, _default| existing }
+      end
+
+      def package_scripts
+        {
           'tauri' => 'tauri',
           'electron:start' => 'electron .',
           'electron:build:deb' => 'electron-builder --linux deb --publish never',
           'electron:build:win' => 'electron-builder --win nsis --publish never',
           'electron:build:mac' => 'electron-builder --mac dmg --publish never',
           'capacitor:sync' => 'cap sync android',
-          'capacitor:assets' => "capacitor-assets generate --android --androidProject tmp/android --iconBackgroundColor '#ffffff' --iconBackgroundColorDark '#111111'"
-        ) { |_key, existing, _default| existing }
+          'capacitor:assets' => [
+            'capacitor-assets generate --android --androidProject tmp/android',
+            "--iconBackgroundColor '#ffffff' --iconBackgroundColorDark '#111111'"
+          ].join(' ')
+        }
+      end
+
+      def update_package_dependencies(package)
         package['devDependencies'] ||= {}
         package['devDependencies'].merge!(
           '@capacitor/android' => '^8.6.2',
@@ -77,25 +103,23 @@ module Sloop
           'electron-builder' => '^26.0.12',
           'typescript' => '^5.9.3'
         ) { |_key, existing, _default| existing }
-        package['build'] ||= {}
-        package['build']['directories'] ||= { 'output' => 'tmp/electron' }
-        package['build']['files'] ||= [
+      end
+
+      def update_package_build(package)
+        build = package['build'] ||= {}
+        build['directories'] ||= { 'output' => 'tmp/electron' }
+        build['files'] ||= [
           'tmp/packages/main.js',
           'tmp/packages/app-url.js',
           'package.json'
         ]
-        package['build']['mac'] ||= {}
-        package['build']['mac']['icon'] ||= Package::CONFIG.fetch(:icon)
-        package['build']['win'] ||= {}
-        package['build']['win']['icon'] ||= Package::CONFIG.fetch(:icon)
-        package['build']['linux'] ||= {}
-        package['build']['linux']['icon'] ||= 'tmp/electron-icons'
+        %w[mac win].each { |platform| configure_icon(build, platform, Package::CONFIG.fetch(:icon)) }
+        configure_icon(build, 'linux', 'tmp/electron-icons')
+      end
 
-        File.write(path, "#{JSON.pretty_generate(package)}\n")
-        puts 'Updated package.json'
-        true
-      rescue JSON::ParserError => e
-        abort "Could not parse package.json: #{e.message}"
+      def configure_icon(build, platform, icon)
+        build[platform] ||= {}
+        build[platform]['icon'] ||= icon
       end
 
       def package_config
@@ -113,17 +137,12 @@ module Sloop
 
       def default_author(package)
         author = package['author']
-        if author.is_a?(Hash)
-          author['name'] ||= Package::CONFIG.fetch(:developer)
-          author['email'] ||= Package::CONFIG.fetch(:email)
-          return author
-        end
-        return author unless author.nil?
+        return author unless author.nil? || author.is_a?(Hash)
 
-        {
-          'name' => Package::CONFIG.fetch(:developer),
-          'email' => Package::CONFIG.fetch(:email)
-        }
+        author ||= {}
+        author['name'] ||= Package::CONFIG.fetch(:developer)
+        author['email'] ||= Package::CONFIG.fetch(:email)
+        author
       end
     end
   end

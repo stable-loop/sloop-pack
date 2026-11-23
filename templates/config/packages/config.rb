@@ -6,7 +6,10 @@ module Package
     version: '1.0.0',
     url: 'https://repebox.com',
     summary: 'Repebox worship songs and resources',
-    description: 'Repebox provides songs, chords, lyrics, screen jumps and worship resources for churches and worship teams.',
+    description: [
+      'Repebox provides songs, chords, lyrics, screen jumps and worship resources',
+      'for churches and worship teams.'
+    ].join(' '),
     id: 'com.repebox.app',
     tag: 'repebox',
     developer: 'Stableloop.dev',

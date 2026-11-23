@@ -12,20 +12,24 @@ module Package
 
         FileUtils.mkdir_p(keystore_directory)
         validate_configuration
+        create_keystore
+        print_instructions
+      end
 
-        sh 'keytool',
-           '-genkeypair',
-           '-v',
-           '-keystore', keystore_path,
-           '-storetype', 'JKS',
-           '-storepass', keystore_password,
-           '-keypass', key_password,
-           '-alias', key_alias,
-           '-keyalg', 'RSA',
-           '-keysize', '4096',
-           '-validity', validity_days,
-           '-dname', 'CN=Repebox, OU=Repebox, O=, L=, ST=, C=ES'
+      def create_keystore
+        sh 'keytool', *keytool_arguments
+      end
 
+      def keytool_arguments
+        [
+          '-genkeypair', '-v', '-keystore', keystore_path, '-storetype', 'JKS',
+          '-storepass', keystore_password, '-keypass', key_password, '-alias', key_alias,
+          '-keyalg', 'RSA', '-keysize', '4096', '-validity', validity_days,
+          '-dname', 'CN=Repebox, OU=Repebox, O=, L=, ST=, C=ES'
+        ]
+      end
+
+      def print_instructions
         puts
         puts "Android keystore generated: #{keystore_path}"
         puts "android_key_alias: #{key_alias}"

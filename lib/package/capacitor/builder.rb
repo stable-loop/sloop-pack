@@ -57,25 +57,20 @@ module Package
       end
 
       def remove_unused_flat_dir_repositories
-        app_build_gradle = project_directory.join(
-          'app', 'build.gradle'
-        )
-        app_contents = File.read(app_build_gradle)
-        app_contents = app_contents.gsub(
+        remove_repository_block(
+          project_directory.join('app', 'build.gradle'),
           /\nrepositories \{\n    flatDir\{\n        dirs [^\n]+\n    \}\n\}\n/,
           "\n"
         )
-        File.write(app_build_gradle, app_contents)
-
-        cordova_build_gradle = project_directory.join(
-          'capacitor-cordova-android-plugins', 'build.gradle'
-        )
-        cordova_contents = File.read(cordova_build_gradle)
-        cordova_contents = cordova_contents.gsub(
+        remove_repository_block(
+          project_directory.join('capacitor-cordova-android-plugins', 'build.gradle'),
           /\n    flatDir\{\n        dirs [^\n]+\n    \}/,
           ''
         )
-        File.write(cordova_build_gradle, cordova_contents)
+      end
+
+      def remove_repository_block(build_gradle, pattern, replacement)
+        File.write(build_gradle, File.read(build_gradle).gsub(pattern, replacement))
       end
     end
   end
