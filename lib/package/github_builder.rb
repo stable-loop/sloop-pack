@@ -1,22 +1,26 @@
-class Package::GithubBuilder
-  def initialize(platform)
-    @platform = platform.to_sym
-  end
+# frozen_string_literal: true
 
-  def build
-    run_id = github_runner.run
-    puts "GitHub Actions: downloading pack-#{@platform}..."
-    package_file = github_downloader.download(run_id)
-    Package::Copier.new.copy_to_s3(package_file)
-  end
+module Package
+  class GithubBuilder
+    def initialize(platform)
+      @platform = platform.to_sym
+    end
 
-  private
+    def build
+      run_id = github_runner.run
+      puts "GitHub Actions: downloading pack-#{@platform}..."
+      package_file = github_downloader.download(run_id)
+      Package::Copier.new.copy_to_s3(package_file)
+    end
 
-  def github_downloader
-    @github_downloader ||= Package::Github::Downloader.new(@platform)
-  end
+    private
 
-  def github_runner
-    @github_runner ||= Package::Github::Runner.new(@platform)
+    def github_downloader
+      @github_downloader ||= Package::Github::Downloader.new(@platform)
+    end
+
+    def github_runner
+      @github_runner ||= Package::Github::Runner.new(@platform)
+    end
   end
 end

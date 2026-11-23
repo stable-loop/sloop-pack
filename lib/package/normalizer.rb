@@ -1,15 +1,19 @@
-require "fileutils"
+# frozen_string_literal: true
 
-class Package::Normalizer
-  def normalize(package_file)
-    extension = File.extname(package_file)
-    normalized_file = File.join(
-      File.dirname(package_file),
-      "#{Package::CONFIG.fetch(:tag)}#{extension}"
-    )
-    return normalized_file if File.expand_path(package_file) == File.expand_path(normalized_file)
+require 'fileutils'
 
-    FileUtils.mv(package_file, normalized_file)
-    normalized_file
+module Package
+  class Normalizer
+    def normalize(package_file)
+      extension = File.extname(package_file)
+      normalized_file = File.join(
+        File.dirname(package_file),
+        "#{Package::CONFIG.fetch(:tag)}#{extension}"
+      )
+      return normalized_file if File.expand_path(package_file) == File.expand_path(normalized_file)
+
+      FileUtils.mv(package_file, normalized_file)
+      normalized_file
+    end
   end
 end

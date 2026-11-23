@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require "sloop/pack"
-require "sloop/pack/installer"
+require 'sloop/pack'
+require 'sloop/pack/installer'
 
 case ARGV.shift
-when "init"
+when 'init'
   Sloop::Pack::Installer.new(Dir.pwd).install
 else
-  warn "Usage: sloop-pack init"
+  warn 'Usage: sloop-pack init'
   exit 1
 end

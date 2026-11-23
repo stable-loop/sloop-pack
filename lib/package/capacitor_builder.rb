@@ -1,17 +1,21 @@
-class Package::CapacitorBuilder
-  def initialize(platform)
-    @platform = platform.to_sym
-  end
+# frozen_string_literal: true
 
-  def build
-    Package::TemplateRenderer.new.render(Package::RENDERED_DIRECTORY)
-    package_file = Package::Normalizer.new.normalize(capacitor_builder.build)
-    Package::Copier.new.copy_to_public(package_file)
-  end
+module Package
+  class CapacitorBuilder
+    def initialize(platform)
+      @platform = platform.to_sym
+    end
 
-  private
+    def build
+      Package::TemplateRenderer.new.render(Package::RENDERED_DIRECTORY)
+      package_file = Package::Normalizer.new.normalize(capacitor_builder.build)
+      Package::Copier.new.copy_to_public(package_file)
+    end
 
-  def capacitor_builder
-    @capacitor_builder ||= Package::Capacitor::Builder.new(@platform)
+    private
+
+    def capacitor_builder
+      @capacitor_builder ||= Package::Capacitor::Builder.new(@platform)
+    end
   end
 end

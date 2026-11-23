@@ -1,24 +1,30 @@
-require "fileutils"
+# frozen_string_literal: true
 
-class Package::Github::Downloader
-  include Rake::FileUtilsExt
+require 'fileutils'
 
-  def initialize(platform)
-    @platform = platform
-  end
+module Package
+  module Github
+    class Downloader
+      include Rake::FileUtilsExt
 
-  def download(run_id)
-    artifact = "pack-#{@platform}"
-    extension = Package::EXTENSIONS.fetch(@platform).fetch(:extension)
+      def initialize(platform)
+        @platform = platform
+      end
 
-    download_dir = Rails.root.join("tmp", "github-#{@platform}")
-    FileUtils.rm_rf(download_dir)
-    FileUtils.mkdir_p(download_dir)
-    sh "gh", "run", "download", run_id.to_s, "--name", artifact, "--dir", download_dir.to_s
+      def download(run_id)
+        artifact = "pack-#{@platform}"
+        extension = Package::EXTENSIONS.fetch(@platform).fetch(:extension)
 
-    package_file = Dir[download_dir.join("**", "*.#{extension}").to_s].first
-    return package_file if package_file
+        download_dir = Rails.root.join('tmp', "github-#{@platform}")
+        FileUtils.rm_rf(download_dir)
+        FileUtils.mkdir_p(download_dir)
+        sh 'gh', 'run', 'download', run_id.to_s, '--name', artifact, '--dir', download_dir.to_s
 
-    abort "Downloaded artifact does not contain a .#{extension} package"
+        package_file = Dir[download_dir.join('**', "*.#{extension}").to_s].first
+        return package_file if package_file
+
+        abort "Downloaded artifact does not contain a .#{extension} package"
+      end
+    end
   end
 end
