@@ -13,5 +13,9 @@ describe Sloop::Pack::Installer do
 
     package = JSON.parse(package_json_path.read)
     expect(package.fetch("author").fetch("name")).to eq(Package::CONFIG.fetch(:developer))
+    expect(package.fetch("description")).to eq(Package::CONFIG.fetch(:description))
+    expect(package.dig("build", "mac", "icon")).to eq(Package::CONFIG.fetch(:icon))
+    expect(package.dig("build", "win", "icon")).to eq(Package::CONFIG.fetch(:icon))
+    expect(package.dig("build", "linux", "icon")).to eq("tmp/electron-icons")
   end
 end

@@ -50,6 +50,7 @@ module Sloop
         package = JSON.parse(File.read(path))
         package["name"] ||= File.basename(@destination).downcase.gsub(/[^a-z0-9._-]+/, "-")
         package["version"] ||= "1.0.0"
+        package["description"] ||= Package::CONFIG.fetch(:description)
         package["author"] = default_author(package)
         package["main"] ||= "tmp/packages/main.js"
         package["scripts"] ||= {}
@@ -80,6 +81,12 @@ module Sloop
           "tmp/packages/app-url.js",
           "package.json"
         ]
+        package["build"]["mac"] ||= {}
+        package["build"]["mac"]["icon"] ||= Package::CONFIG.fetch(:icon)
+        package["build"]["win"] ||= {}
+        package["build"]["win"]["icon"] ||= Package::CONFIG.fetch(:icon)
+        package["build"]["linux"] ||= {}
+        package["build"]["linux"]["icon"] ||= "tmp/electron-icons"
 
         File.write(path, "#{JSON.pretty_generate(package)}\n")
         puts "Updated package.json"

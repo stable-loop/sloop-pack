@@ -33,6 +33,7 @@ describe "package Rake tasks" do
       rendered_config = JSON.parse(project_directory.join("tauri.conf.json").read)
       expect(rendered_files(project_directory)).to eq(expected_rendered_files(template_directory))
       expect(rendered_config.fetch("productName")).to eq(Package::CONFIG.fetch(:name))
+      expect(rendered_config.fetch("bundle").fetch("category")).to eq(Package::CONFIG.fetch(:category))
       normalized_filename = "#{Package::CONFIG.fetch(:tag)}.deb"
       expect(Rails.root.join("public", normalized_filename).read).to eq("built package")
       expect(package_file).not_to exist

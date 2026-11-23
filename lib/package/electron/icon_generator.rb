@@ -3,7 +3,7 @@ require "fileutils"
 class Package::Electron::IconGenerator
   include Rake::FileUtilsExt
 
-  ICON_SIZES = %w[16 32 48 64 128 256 512].freeze
+  ICON_SIZES = %w[16 24 32 48 64 128 256 512].freeze
 
   def generate
     icon_dir = Rails.root.join("tmp/electron-icons")

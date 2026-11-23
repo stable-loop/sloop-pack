@@ -9,6 +9,7 @@ module Package
     tag: "repebox",
     developer: "Repebox.com",
     email: "support@repebox.com",
+    category: "Utility",
     icon: "public/icon_mobile.png",
     rendered_directory: "tmp/packages",
     # Electron generates desktop packages for Windows, macOS and Linux.
@@ -22,7 +23,6 @@ module Package
     # Tauri generates desktop packages for Windows, macOS and Linux.
     # Based on Webview and Rust. With light weights.
     tauri: {
-      category: "Utility",
       window_height: 900,
       window_min_height: 600,
       window_min_width: 800,
