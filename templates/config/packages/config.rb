@@ -42,37 +42,6 @@ module Package
       access_key_id: Cred[:s3_access_key_id],
       secret_access_key: Cred[:s3_secret_access_key]
     }.freeze
-    # Github Actions generates downloadable packages for Android, Windows, macOS and Linux.
-    # Downloadable packages are stored in a public S3 bucket.
-    GITHUB = {
-      downloads: [
-        {
-          platform: :android,
-          icon: "android",
-          filename: "repebox.apk",
-          url: "https://stableloop-public.s3.fr-par.scw.cloud/repebox/repebox.apk"
-        },
-        {
-          platform: :windows,
-          icon: "windows",
-          filename: "Repebox_1.0.0_x64-setup.exe",
-          url: "https://stableloop-public.s3.fr-par.scw.cloud/repebox/Repebox_1.0.0_x64-setup.exe"
-        },
-        {
-          platform: :macos,
-          icon: "apple",
-          filename: "Repebox-1.0.0-arm64.dmg",
-          url: "https://stableloop-public.s3.fr-par.scw.cloud/repebox/Repebox-1.0.0-arm64.dmg"
-        },
-        {
-          platform: :linux,
-          icon: "ubuntu",
-          filename: "repebox_1.0.0_amd64.deb",
-          url: "https://stableloop-public.s3.fr-par.scw.cloud/repebox/repebox_1.0.0_amd64.deb"
-        }
-      ]
-    }.freeze
-
     VALUES = {
       name: "Repebox",
       version: "1.0.0",
@@ -86,7 +55,6 @@ module Package
       rendered_directory: "tmp/packages",
       capacitor: CAPACITOR,
       electron: ELECTRON,
-      github: GITHUB,
       tauri: TAURI
     }.freeze
   end
