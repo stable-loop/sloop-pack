@@ -127,6 +127,11 @@ Upload a local package to the configured public S3 bucket:
 bundle exec rake package:upload[file]
 ```
 
+Configure the bucket, endpoint, region, object prefix and public download URLs in
+`config/packages/config.rb` under `Package::Config::S3`. The access key and
+secret key are read from Rails credentials as `s3_access_key_id` and
+`s3_secret_access_key`.
+
 GitHub workflow files are installed into the consuming repository because GitHub
 only detects workflows under `.github/workflows/`. The workflow source templates
 remain packaged inside `sloop-pack`.

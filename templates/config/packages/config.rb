@@ -52,6 +52,15 @@ module Package
       keystore_password: Cred[:android_keystore_password],
       keystore_key_password: Cred[:android_key_password]
     }.freeze
+    # S3 to upload public packages.
+    S3 = {
+      bucket: "stableloop-public",
+      endpoint: "https://s3.fr-par.scw.cloud",
+      region: "fr-par",
+      prefix: "repebox/",
+      access_key_id: Cred[:s3_access_key_id],
+      secret_access_key: Cred[:s3_secret_access_key]
+    }.freeze
     # Github Actions generates downloadable packages for Android, Windows, macOS and Linux.
     # Downloadable packages are stored in a public S3 bucket.
     GITHUB = {
