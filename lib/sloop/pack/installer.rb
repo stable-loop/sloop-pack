@@ -97,15 +97,15 @@ module Sloop
       def default_author(package)
         author = package["author"]
         if author.is_a?(Hash)
-          author["name"] ||= package["name"]
-          author["email"] ||= "#{package["name"]}@example.com"
+          author["name"] ||= Package::CONFIG.fetch(:developer)
+          author["email"] ||= Package::CONFIG.fetch(:email)
           return author
         end
         return author unless author.nil?
 
         {
-          "name" => package["name"],
-          "email" => "#{package["name"]}@example.com"
+          "name" => Package::CONFIG.fetch(:developer),
+          "email" => Package::CONFIG.fetch(:email)
         }
       end
     end

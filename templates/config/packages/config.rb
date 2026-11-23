@@ -8,6 +8,7 @@ module Package
     id: "com.repebox.app",
     tag: "repebox",
     developer: "Repebox.com",
+    email: "support@repebox.com",
     icon: "public/icon_mobile.png",
     rendered_directory: "tmp/packages",
     # Electron generates desktop packages for Windows, macOS and Linux.
