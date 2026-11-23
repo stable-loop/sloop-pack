@@ -5,7 +5,7 @@ module Package
 
   TEMPLATE_DIRECTORY = Pathname.new(File.expand_path("../templates/app/views/packages", __dir__)).freeze
   RENDERED_DIRECTORY = Rails.root.join(Config::VALUES.fetch(:rendered_directory)).freeze
-  PUBLIC_ICON = Rails.root.join(Config::VALUES.fetch(:public_icon)).freeze
+  PUBLIC_ICON = Rails.root.join(Config::VALUES.fetch(:icon)).freeze
 
   EXTENSIONS = {
     deb: "deb",

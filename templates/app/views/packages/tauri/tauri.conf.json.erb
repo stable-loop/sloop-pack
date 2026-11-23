@@ -1,16 +1,16 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "<%= config.fetch(:app_name) %>",
+  "productName": "<%= config.fetch(:name) %>",
   "version": "<%= config.fetch(:version) %>",
-  "identifier": "<%= config.fetch(:app_id) %>",
+  "identifier": "<%= config.fetch(:id) %>",
   "build": {
-    "frontendDist": "<%= config.fetch(:app_url) %>",
-    "devUrl": "<%= config.fetch(:app_url) %>"
+    "frontendDist": "<%= config.fetch(:url) %>",
+    "devUrl": "<%= config.fetch(:url) %>"
   },
   "app": {
     "windows": [
       {
-        "title": "<%= config.fetch(:app_name) %>",
+        "title": "<%= config.fetch(:name) %>",
         "width": <%= config.fetch(:tauri).fetch(:window_width) %>,
         "height": <%= config.fetch(:tauri).fetch(:window_height) %>,
         "minWidth": <%= config.fetch(:tauri).fetch(:window_min_width) %>,

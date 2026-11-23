@@ -74,15 +74,15 @@ module Package
     }.freeze
 
     VALUES = {
-      app_name: "Repebox",
+      name: "Repebox",
       version: "1.0.0",
-      app_url: "https://repebox.com",
+      url: "https://repebox.com",
       summary: "Repebox worship songs and resources",
       description: "Repebox provides songs, chords, lyrics, screen jumps and worship resources for churches and worship teams.",
-      app_id: "com.repebox.app",
-      product_tag: "repebox",
+      id: "com.repebox.app",
+      tag: "repebox",
       developer: "Repebox.com",
-      public_icon: "public/icon_mobile.png",
+      icon: "public/icon_mobile.png",
       rendered_directory: "tmp/packages",
       capacitor: CAPACITOR,
       electron: ELECTRON,

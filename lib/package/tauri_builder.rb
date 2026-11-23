@@ -34,7 +34,7 @@ class Package::TauriBuilder
     end
   end
 
-  def public_icon = Rails.root.join(Package::Config::VALUES.fetch(:public_icon)).to_s
+  def public_icon = Rails.root.join(Package::Config::VALUES.fetch(:icon)).to_s
   def tauri_cli = Rails.root.join(Package::Config::TAURI.fetch(:tauri_cli)).to_s
   def project_directory = Rails.root.join(Package::Config::TAURI.fetch(:project_directory)).to_s
   def target_directory = Rails.root.join(Package::Config::TAURI.fetch(:target_directory))
