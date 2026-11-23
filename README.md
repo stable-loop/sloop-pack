@@ -2,6 +2,8 @@
 
 This gem generates the necessary build files and packages for Debian, Windows, Mac and Android, and provides tasks to upload the resulting packages to S3. Also included are GitHub Actions workflows to build and upload packages on demand.
 
+[![CI](https://github.com/stable-loop/sloop-pack/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/stable-loop/sloop-pack/actions/workflows/ci.yml)
+
 ## Contents
 
 - [Installation](#installation)
