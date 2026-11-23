@@ -11,7 +11,7 @@ class Package::Electron::Builder
 
     Package::Finder.new(
       directory: Rails.root.join("tmp/electron"),
-      pattern: "*.#{Package::EXTENSIONS.fetch(@platform)}"
+      pattern: "*.#{Package::EXTENSIONS.fetch(@platform).fetch(:extension)}"
     ).find
   end
 end

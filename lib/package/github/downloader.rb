@@ -9,7 +9,7 @@ class Package::Github::Downloader
 
   def download(run_id)
     artifact = "pack-#{@platform}"
-    extension = Package::EXTENSIONS[@platform]
+    extension = Package::EXTENSIONS.fetch(@platform).fetch(:extension)
 
     download_dir = Rails.root.join("tmp", "github-#{@platform}")
     FileUtils.rm_rf(download_dir)

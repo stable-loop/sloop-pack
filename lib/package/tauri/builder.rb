@@ -16,7 +16,7 @@ class Package::Tauri::Builder
       directory: target_directory.join(
         "release", "bundle", Package::Tauri::BUNDLES.fetch(@platform)
       ),
-      pattern: "*.#{Package::EXTENSIONS.fetch(@platform)}"
+      pattern: "*.#{Package::EXTENSIONS.fetch(@platform).fetch(:extension)}"
     ).find
   end
 
