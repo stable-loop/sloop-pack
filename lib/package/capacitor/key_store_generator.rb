@@ -40,11 +40,12 @@ class Package::Capacitor::KeyStoreGenerator
     abort "android_key_password credential is required" if key_password.empty?
   end
 
+  def capacitor_config = Package::CONFIG.fetch(:capacitor)
   def keystore_directory = Rails.root.join("config", "packages")
-  def keystore_password = Package::Config::CAPACITOR.fetch(:keystore_password).to_s
-  def key_password = Package::Config::CAPACITOR.fetch(:keystore_key_password).to_s
+  def keystore_password = capacitor_config.fetch(:keystore_password).to_s
+  def key_password = capacitor_config.fetch(:keystore_key_password).to_s
   def keystore_path = keystore_directory.join(keystore_filename).to_s
-  def keystore_filename = Package::Config::CAPACITOR.fetch(:keystore_filename)
-  def key_alias = Package::Config::CAPACITOR.fetch(:keystore_key_alias)
-  def validity_days = Package::Config::CAPACITOR.fetch(:keystore_validity_days)
+  def keystore_filename = capacitor_config.fetch(:keystore_filename)
+  def key_alias = capacitor_config.fetch(:keystore_key_alias)
+  def validity_days = capacitor_config.fetch(:keystore_validity_days)
 end

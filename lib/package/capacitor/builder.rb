@@ -22,10 +22,11 @@ class Package::Capacitor::Builder
 
   private
 
-  def project_directory = Rails.root.join(Package::Config::CAPACITOR.fetch(:android_project_directory))
-  def assets_directory = Rails.root.join(Package::Config::CAPACITOR.fetch(:capacitor_assets_directory))
+  def capacitor_config = Package::CONFIG.fetch(:capacitor)
+  def project_directory = Rails.root.join(capacitor_config.fetch(:android_project_directory))
+  def assets_directory = Rails.root.join(capacitor_config.fetch(:capacitor_assets_directory))
   def capacitor_icon = assets_directory.join("icon.png")
-  def gradle_wrapper = Rails.root.join(Package::Config::CAPACITOR.fetch(:gradle_wrapper)).to_s
+  def gradle_wrapper = Rails.root.join(capacitor_config.fetch(:gradle_wrapper)).to_s
 
   def ensure_android_project
     FileUtils.mkdir_p(Rails.root.join("tmp", "www"))

@@ -1,16 +1,26 @@
 module Package
-  module Config
+  CONFIG = {
+    name: "Repebox",
+    version: "1.0.0",
+    url: "https://repebox.com",
+    summary: "Repebox worship songs and resources",
+    description: "Repebox provides songs, chords, lyrics, screen jumps and worship resources for churches and worship teams.",
+    id: "com.repebox.app",
+    tag: "repebox",
+    developer: "Repebox.com",
+    icon: "public/icon_mobile.png",
+    rendered_directory: "tmp/packages",
     # Electron generates desktop packages for Windows, macOS and Linux.
     # Based on Chromium and Node.js. With heavy weights.
-    ELECTRON = {
+    electron: {
       window_height: 900,
       window_min_height: 600,
       window_min_width: 800,
       window_width: 1280
-    }.freeze
+    },
     # Tauri generates desktop packages for Windows, macOS and Linux.
     # Based on Webview and Rust. With light weights.
-    TAURI = {
+    tauri: {
       category: "Utility",
       window_height: 900,
       window_min_height: 600,
@@ -19,9 +29,9 @@ module Package
       target_directory: "tmp/tauri/target",
       project_directory: "tmp/tauri/project",
       tauri_cli: "node_modules/@tauri-apps/cli/tauri.js"
-    }.freeze
+    },
     # Capacitor generates mobile packages for Android and iOS.
-    CAPACITOR = {
+    capacitor: {
       web_dir: "tmp/www",
       android_path: "tmp/android",
       android_project_directory: "tmp/android",
@@ -32,30 +42,15 @@ module Package
       keystore_validity_days: "100000",
       keystore_password: Cred[:android_keystore_password],
       keystore_key_password: Cred[:android_key_password]
-    }.freeze
+    },
     # S3 to upload public packages.
-    S3 = {
+    s3: {
       bucket: "stableloop-public",
       endpoint: "https://s3.fr-par.scw.cloud",
       region: "fr-par",
       prefix: "repebox/",
       access_key_id: Cred[:s3_access_key_id],
       secret_access_key: Cred[:s3_secret_access_key]
-    }.freeze
-    VALUES = {
-      name: "Repebox",
-      version: "1.0.0",
-      url: "https://repebox.com",
-      summary: "Repebox worship songs and resources",
-      description: "Repebox provides songs, chords, lyrics, screen jumps and worship resources for churches and worship teams.",
-      id: "com.repebox.app",
-      tag: "repebox",
-      developer: "Repebox.com",
-      icon: "public/icon_mobile.png",
-      rendered_directory: "tmp/packages",
-      capacitor: CAPACITOR,
-      electron: ELECTRON,
-      tauri: TAURI
-    }.freeze
-  end
+    }
+  }.freeze
 end

@@ -10,9 +10,9 @@ describe "package Rake tasks" do
 
       expect(rendered_files(Package::RENDERED_DIRECTORY)).to eq(expected_rendered_files)
       expect(Package::RENDERED_DIRECTORY.join("app-url.js").read)
-        .to include(Package::Config::VALUES.fetch(:url))
+        .to include(Package::CONFIG.fetch(:url))
       expect(stale_file).not_to exist
-      normalized_filename = "#{Package::Config::VALUES.fetch(:tag)}.exe"
+      normalized_filename = "#{Package::CONFIG.fetch(:tag)}.exe"
       expect(Rails.root.join("public", normalized_filename).read).to eq("built package")
       expect(package_file).not_to exist
     end
@@ -27,12 +27,13 @@ describe "package Rake tasks" do
 
       invoke_package_task("tauri:build:deb")
 
-      project_directory = Rails.root.join(Package::Config::TAURI.fetch(:project_directory))
+      tauri_config = Package::CONFIG.fetch(:tauri)
+      project_directory = Rails.root.join(tauri_config.fetch(:project_directory))
       template_directory = Package::TEMPLATE_DIRECTORY.join("tauri")
       rendered_config = JSON.parse(project_directory.join("tauri.conf.json").read)
       expect(rendered_files(project_directory)).to eq(expected_rendered_files(template_directory))
-      expect(rendered_config.fetch("productName")).to eq(Package::Config::VALUES.fetch(:name))
-      normalized_filename = "#{Package::Config::VALUES.fetch(:tag)}.deb"
+      expect(rendered_config.fetch("productName")).to eq(Package::CONFIG.fetch(:name))
+      normalized_filename = "#{Package::CONFIG.fetch(:tag)}.deb"
       expect(Rails.root.join("public", normalized_filename).read).to eq("built package")
       expect(package_file).not_to exist
     end
@@ -46,8 +47,8 @@ describe "package Rake tasks" do
 
       expect(rendered_files(Package::RENDERED_DIRECTORY)).to eq(expected_rendered_files)
       expect(Package::RENDERED_DIRECTORY.join("capacitor.config.ts").read)
-        .to include(Package::Config::VALUES.fetch(:id))
-      normalized_filename = "#{Package::Config::VALUES.fetch(:tag)}.apk"
+        .to include(Package::CONFIG.fetch(:id))
+      normalized_filename = "#{Package::CONFIG.fetch(:tag)}.apk"
       expect(Rails.root.join("public", normalized_filename).read).to eq("built package")
       expect(package_file).not_to exist
     end
@@ -56,7 +57,8 @@ describe "package Rake tasks" do
   describe "g:keystore" do
     it "creates the keystore through the configured keytool command" do
       generator = Package::Capacitor::KeyStoreGenerator.new
-      keystore_path = Rails.root.join("config", "packages", Package::Config::CAPACITOR.fetch(:keystore_filename))
+      capacitor_config = Package::CONFIG.fetch(:capacitor)
+      keystore_path = Rails.root.join("config", "packages", capacitor_config.fetch(:keystore_filename))
       allow(generator).to receive(:sh) do |*command|
         expect(command.first).to eq("keytool")
         expect(command).to include("-keystore", keystore_path.to_s)

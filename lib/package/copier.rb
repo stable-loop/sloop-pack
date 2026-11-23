@@ -34,7 +34,7 @@ class Package::Copier
 
   private
 
-  def s3_config = Package::Config::S3
+  def s3_config = Package::CONFIG.fetch(:s3)
 
   def s3_client
     Aws::S3::Client.new(

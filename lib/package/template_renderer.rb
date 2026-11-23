@@ -20,6 +20,6 @@ class Package::TemplateRenderer
   private
 
   def render_template(template_path)
-    ERB.new(File.read(template_path)).result_with_hash(config: Package::Config::VALUES)
+    ERB.new(File.read(template_path)).result_with_hash(config: Package::CONFIG)
   end
 end

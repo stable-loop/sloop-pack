@@ -1,7 +1,7 @@
 describe Package::Copier do
   describe "#copy_to_s3" do
     it "uploads using the S3 settings from package config" do
-      s3_config = Package::Config::S3
+      s3_config = Package::CONFIG.fetch(:s3)
       package_file = Rails.root.join("tmp", "repebox.apk")
       FileUtils.mkdir_p(package_file.dirname)
       File.write(package_file, "package")

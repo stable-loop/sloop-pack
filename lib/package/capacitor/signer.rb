@@ -37,10 +37,11 @@ class Package::Capacitor::Signer
   end
 
   def keystore_path = Rails.root.join("config", "packages", keystore_filename).to_s
-  def key_alias = Package::Config::CAPACITOR.fetch(:keystore_key_alias).to_s
-  def keystore_password = Package::Config::CAPACITOR.fetch(:keystore_password).to_s
-  def key_password = Package::Config::CAPACITOR.fetch(:keystore_key_password).to_s
-  def keystore_filename = Package::Config::CAPACITOR.fetch(:keystore_filename)
+  def capacitor_config = Package::CONFIG.fetch(:capacitor)
+  def key_alias = capacitor_config.fetch(:keystore_key_alias).to_s
+  def keystore_password = capacitor_config.fetch(:keystore_password).to_s
+  def key_password = capacitor_config.fetch(:keystore_key_password).to_s
+  def keystore_filename = capacitor_config.fetch(:keystore_filename)
 
   def with_password_files(directory)
     keystore_password_file = directory.join("keystore-password")

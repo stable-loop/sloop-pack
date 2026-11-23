@@ -5,8 +5,8 @@ module Package
   require Rails.root.join("config", "packages", "config.rb").to_s
 
   TEMPLATE_DIRECTORY = Pathname.new(File.expand_path("../templates/app/views/packages", __dir__)).freeze
-  RENDERED_DIRECTORY = Rails.root.join(Config::VALUES.fetch(:rendered_directory)).freeze
-  PUBLIC_ICON = Rails.root.join(Config::VALUES.fetch(:icon)).freeze
+  RENDERED_DIRECTORY = Rails.root.join(CONFIG.fetch(:rendered_directory)).freeze
+  PUBLIC_ICON = Rails.root.join(CONFIG.fetch(:icon)).freeze
 
   EXTENSIONS = {
     apk: { extension: "apk", download_platform: :android, icon: "android" }.freeze,
@@ -16,11 +16,11 @@ module Package
   }.freeze
 
   def self.downloads
-    s3_config = Config::S3
+    s3_config = CONFIG.fetch(:s3)
     base_url = "#{s3_config.fetch(:endpoint).sub("://", "://#{s3_config.fetch(:bucket)}.")}/"
 
     EXTENSIONS.map do |_builder_platform, format|
-      filename = "#{Config::VALUES.fetch(:tag)}.#{format.fetch(:extension)}"
+      filename = "#{CONFIG.fetch(:tag)}.#{format.fetch(:extension)}"
       key = "#{s3_config.fetch(:prefix)}#{filename}"
       {
         platform: format.fetch(:download_platform),

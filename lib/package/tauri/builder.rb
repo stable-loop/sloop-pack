@@ -21,9 +21,10 @@ class Package::Tauri::Builder
   end
 
   private
-  def tauri_cli = Rails.root.join(Package::Config::TAURI.fetch(:tauri_cli)).to_s
-  def project_directory = Rails.root.join(Package::Config::TAURI.fetch(:project_directory)).to_s
-  def target_directory = Rails.root.join(Package::Config::TAURI.fetch(:target_directory))
+  def tauri_config = Package::CONFIG.fetch(:tauri)
+  def tauri_cli = Rails.root.join(tauri_config.fetch(:tauri_cli)).to_s
+  def project_directory = Rails.root.join(tauri_config.fetch(:project_directory)).to_s
+  def target_directory = Rails.root.join(tauri_config.fetch(:target_directory))
 
   def with_target_directory
     original_target_directory = ENV["CARGO_TARGET_DIR"]

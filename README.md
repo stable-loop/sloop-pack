@@ -131,7 +131,7 @@ bundle exec rake package:upload[file]
 ```
 
 Configure the bucket, endpoint, region, object prefix and public download URLs in
-`config/packages/config.rb` under `Package::Config::S3`. The access key and
+`config/packages/config.rb` under `Package::CONFIG[:s3]`. The access key and
 secret key are read from Rails credentials as `s3_access_key_id` and
 `s3_secret_access_key`.
 

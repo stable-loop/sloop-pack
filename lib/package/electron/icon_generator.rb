@@ -16,5 +16,5 @@ class Package::Electron::IconGenerator
     end
   end
 
-  def public_icon = Package::Config::VALUES.fetch(:icon)
+  def public_icon = Package::CONFIG.fetch(:icon)
 end
