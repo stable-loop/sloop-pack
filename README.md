@@ -144,6 +144,18 @@ Configure the bucket, endpoint, region, object prefix and public download URLs i
 secret key are read from Rails credentials as `s3_access_key_id` and
 `s3_secret_access_key`.
 
+Use `Package::DOWNLOAD_PACKAGES` to build a downloads page. It contains package
+metadata, including each package's platform, filename and generated download URL:
+
+```ruby
+Package::DOWNLOAD_PACKAGES.each do |package|
+  link_to package[:filename], package[:url]
+end
+```
+
+The URLs are generated from the package tag and S3 settings in
+`config/packages/config.rb`.
+
 GitHub workflow files are installed into the consuming repository because GitHub
 only detects workflows under `.github/workflows/`. The workflow source templates
 remain packaged inside `sloop-pack`.
