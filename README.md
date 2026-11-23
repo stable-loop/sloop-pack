@@ -12,6 +12,7 @@ This gem generates the necessary build files and packages for Debian, Windows, M
 - [Capacitor: Mobile packages](#capacitor)
 - [Other tasks](#other-tasks)
 - [Development](#development)
+- [License](#license)
 
 ## Installation
 
@@ -154,3 +155,9 @@ Run the test suite with:
 ```bash
 bundle exec rspec
 ```
+
+## License
+
+Under [MIT License](https://opensource.org/license/MIT)
+
+Copyright (c) 2026 Stableloop.
