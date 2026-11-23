@@ -143,7 +143,8 @@ This removes the installed build workflows, the entire `config/packages/`
 directory (including `config.rb` and the configured Android keystore), and the
 Capacitor wrapper. Back up the keystore before cleaning if you may need it again.
 Generated Electron, Capacitor and Tauri entries are removed from `package.json`;
-unrelated package settings are kept.
+unrelated package settings are kept. When `package.json` exists, the command runs
+`yarn install` to regenerate `yarn.lock`.
 
 Upload a local package to the configured public S3 bucket:
 

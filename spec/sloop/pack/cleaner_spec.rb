@@ -6,6 +6,10 @@ describe Sloop::Pack::Cleaner do
   let(:root) { Rails.root.join('tmp', 'cleaner-app') }
   let(:cleaner) { described_class.new(root) }
 
+  before do
+    allow(cleaner).to receive(:system).with('yarn', 'install').and_return(true)
+  end
+
   def write_config
     config_directory = root.join('config/packages')
     FileUtils.mkdir_p(config_directory)
@@ -62,6 +66,23 @@ describe Sloop::Pack::Cleaner do
       'dependencies' => { 'electron' => 'application dependency' }
     )
     expect(cleaned).not_to have_key('main')
+  end
+
+  it 'runs yarn install when package.json exists' do
+    FileUtils.mkdir_p(root)
+    File.write(root.join('package.json'), '{}')
+
+    cleaner.clean
+
+    expect(cleaner).to have_received(:system).with('yarn', 'install')
+  end
+
+  it 'does not run yarn install when package.json is missing' do
+    FileUtils.mkdir_p(root)
+
+    cleaner.clean
+
+    expect(cleaner).not_to have_received(:system)
   end
 
   it 'removes only generated Electron build settings' do

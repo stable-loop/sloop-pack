@@ -33,10 +33,19 @@ module Sloop
         clean_package_json
         remove_workflows
         remove_generated_files
+        install_javascript_dependencies
         puts 'Sloop Pack files cleaned'
       end
 
       private
+
+      def install_javascript_dependencies
+        return unless File.file?(project_path('package.json'))
+
+        puts 'Regenerating yarn.lock with yarn...'
+        success = Dir.chdir(@root) { system('yarn', 'install') }
+        abort 'Could not regenerate yarn.lock with yarn install' unless success
+      end
 
       def clean_package_json
         path = project_path('package.json')
