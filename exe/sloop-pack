@@ -2,12 +2,15 @@
 # frozen_string_literal: true
 
 require 'sloop/pack'
+require 'sloop/pack/cleaner'
 require 'sloop/pack/installer'
 
 case ARGV.shift
 when 'init'
   Sloop::Pack::Installer.new(Dir.pwd).install
+when 'clean'
+  Sloop::Pack::Cleaner.new(Dir.pwd).clean
 else
-  warn 'Usage: sloop-pack init'
+  warn 'Usage: sloop-pack init | clean'
   exit 1
 end
