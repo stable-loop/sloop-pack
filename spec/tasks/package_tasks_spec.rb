@@ -10,7 +10,7 @@ describe "package Rake tasks" do
 
       expect(rendered_files(Package::RENDERED_DIRECTORY)).to eq(expected_rendered_files)
       expect(Package::RENDERED_DIRECTORY.join("app-url.js").read)
-        .to include(Package::Config::ELECTRON.fetch(:app_url))
+        .to include(Package::Config::VALUES.fetch(:app_url))
       expect(stale_file).not_to exist
       expect(Rails.root.join("public", package_file.basename).read).to eq("built package")
     end
@@ -29,7 +29,7 @@ describe "package Rake tasks" do
       template_directory = Package::TEMPLATE_DIRECTORY.join("tauri")
       rendered_config = JSON.parse(project_directory.join("tauri.conf.json").read)
       expect(rendered_files(project_directory)).to eq(expected_rendered_files(template_directory))
-      expect(rendered_config.fetch("productName")).to eq(Package::Config::TAURI.fetch(:app_name))
+      expect(rendered_config.fetch("productName")).to eq(Package::Config::VALUES.fetch(:app_name))
       expect(Rails.root.join("public", package_file.basename).read).to eq("built package")
     end
   end
@@ -42,7 +42,7 @@ describe "package Rake tasks" do
 
       expect(rendered_files(Package::RENDERED_DIRECTORY)).to eq(expected_rendered_files)
       expect(Package::RENDERED_DIRECTORY.join("capacitor.config.ts").read)
-        .to include(Package::Config::CAPACITOR.fetch(:app_id))
+        .to include(Package::Config::VALUES.fetch(:app_id))
       expect(Rails.root.join("public", package_file.basename).read).to eq("built package")
     end
   end

@@ -1,16 +1,8 @@
 module Package
   module Config
-    # Electron generates descktop packages for Windows, macOS and Linux.
+    # Electron generates desktop packages for Windows, macOS and Linux.
     # Based on Chromium and Node.js. With heavy weights.
     ELECTRON = {
-      app_name: "Repebox",
-      version: "1.0.0",
-      app_url: "https://repebox.com",
-      summary: "Repebox worship songs and resources",
-      description: "Repebox provides songs, chords, lyrics, screen jumps and worship resources for churches and worship teams.",
-      developer: "Repebox.com",
-      product_id: "com.repebox.app",
-      product_tag: "repebox",
       window_height: 900,
       window_min_height: 600,
       window_min_width: 800,
@@ -19,14 +11,6 @@ module Package
     # Tauri generates desktop packages for Windows, macOS and Linux.
     # Based on Webview and Rust. With light weights.
     TAURI = {
-      app_name: "Repebox",
-      version: "1.0.0",
-      app_url: "https://repebox.com",
-      summary: "Repebox worship songs and resources",
-      description: "Repebox provides songs, chords, lyrics, screen jumps and worship resources for churches and worship teams.",
-      developer: "Repebox.com",
-      product_id: "com.repebox.desktop",
-      product_tag: "repebox",
       category: "Utility",
       window_height: 900,
       window_min_height: 600,
@@ -38,9 +22,6 @@ module Package
     }.freeze
     # Capacitor generates mobile packages for Android and iOS.
     CAPACITOR = {
-      app_id: "com.repebox.app",
-      app_name: "Repebox",
-      app_url: "https://repebox.com",
       web_dir: "tmp/www",
       android_path: "tmp/android",
       android_project_directory: "tmp/android",
@@ -93,6 +74,14 @@ module Package
     }.freeze
 
     VALUES = {
+      app_name: "Repebox",
+      version: "1.0.0",
+      app_url: "https://repebox.com",
+      summary: "Repebox worship songs and resources",
+      description: "Repebox provides songs, chords, lyrics, screen jumps and worship resources for churches and worship teams.",
+      app_id: "com.repebox.app",
+      product_tag: "repebox",
+      developer: "Repebox.com",
       public_icon: "public/icon_mobile.png",
       rendered_directory: "tmp/packages",
       capacitor: CAPACITOR,
