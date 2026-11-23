@@ -6,7 +6,7 @@ class Package::ElectronBuilder
   def build
     Package::TemplateRenderer.new.render(Package::RENDERED_DIRECTORY)
     Package::Electron::IconGenerator.new.generate if debian?
-    package_file = electron_builder.build
+    package_file = Package::Normalizer.new.normalize(electron_builder.build)
     Package::Copier.new.copy_to_public(package_file)
   end
 

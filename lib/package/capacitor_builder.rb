@@ -5,7 +5,7 @@ class Package::CapacitorBuilder
 
   def build
     Package::TemplateRenderer.new.render(Package::RENDERED_DIRECTORY)
-    package_file = capacitor_builder.build
+    package_file = Package::Normalizer.new.normalize(capacitor_builder.build)
     Package::Copier.new.copy_to_public(package_file)
   end
 

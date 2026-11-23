@@ -9,7 +9,7 @@ class Package::TauriBuilder
     Package::TemplateRenderer.new.render(Package::RENDERED_DIRECTORY)
     prepare_project
     generate_icons
-    package_file = tauri_builder.build
+    package_file = Package::Normalizer.new.normalize(tauri_builder.build)
     Package::Copier.new.copy_to_public(package_file)
   end
 
