@@ -49,7 +49,7 @@ module Sloop
 
         package = JSON.parse(File.read(path))
         package_config
-        package["name"] ||= File.basename(@destination).downcase.gsub(/[^a-z0-9._-]+/, "-")
+        package["name"] = File.basename(@destination).downcase.gsub(/[^a-z0-9._-]+/, "-")
         package["version"] ||= "1.0.0"
         package["description"] ||= Package::CONFIG.fetch(:description)
         package["author"] = default_author(package)
