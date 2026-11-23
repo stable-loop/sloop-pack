@@ -48,6 +48,7 @@ module Sloop
         end
 
         package = JSON.parse(File.read(path))
+        package_config
         package["name"] ||= File.basename(@destination).downcase.gsub(/[^a-z0-9._-]+/, "-")
         package["version"] ||= "1.0.0"
         package["description"] ||= Package::CONFIG.fetch(:description)
@@ -93,6 +94,13 @@ module Sloop
         true
       rescue JSON::ParserError => error
         abort "Could not parse package.json: #{error.message}"
+      end
+
+      def package_config
+        return Package::CONFIG if defined?(Package::CONFIG)
+
+        require File.join(@destination, "config", "environment")
+        Sloop::Pack.load_package unless defined?(Package::CONFIG)
       end
 
       def install_javascript_dependencies
