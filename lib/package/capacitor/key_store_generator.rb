@@ -30,7 +30,7 @@ class Package::Capacitor::KeyStoreGenerator
     puts
     puts "Store these values in Rails credentials and back up the keystore securely."
     puts "Add secret to Github for Actions:"
-    puts "> gh secret set ANDROID_KEYSTORE_BASE64 < <(base64 -w 0 config/packages/repebox-release.keystore)"
+    puts "> gh secret set ANDROID_KEYSTORE_BASE64 < <(base64 -w 0 #{keystore_path})"
   end
 
   private

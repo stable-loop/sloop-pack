@@ -54,7 +54,7 @@ jobs:
         run: |
           test -n "$ANDROID_KEYSTORE_BASE64"
           mkdir -p config/packages
-          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > config/packages/repebox-release.keystore
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > config/packages/release.keystore
 
       - name: Build signed APK
         env:
