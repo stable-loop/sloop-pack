@@ -6,6 +6,7 @@ AllCops:
   NewCops: disable
   Exclude:
     - lib/sloop-pack.rb
+    - vendor/**/*
 
 Metrics/BlockLength:
   Exclude:
