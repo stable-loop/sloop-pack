@@ -160,4 +160,4 @@ bundle exec rspec
 
 Under [MIT License](https://opensource.org/license/MIT)
 
-Copyright (c) 2026 Stableloop.
+Copyright (c) 2026 [Stableloop](https://stableloop.dev).
