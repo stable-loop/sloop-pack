@@ -78,6 +78,9 @@ cp /path/to/repebox.keystore config/packages/repebox-release.keystore
 bundle exec rake capacitor:build:apk
 ```
 
+Add `config/packages/<keystore_filename>` to `.gitignore` to avoid committing
+the signing keystore.
+
 The Android project is generated under `tmp/android/`. The release APK is signed
 with `zipalign` and `apksigner`, which must be available on `PATH`, and copied to
 `public/`. The launcher icon is generated from `public/icon_mobile.png`.

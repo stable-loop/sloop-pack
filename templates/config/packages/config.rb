@@ -27,7 +27,7 @@ module Package
       android_project_directory: "tmp/android",
       capacitor_assets_directory: "assets",
       gradle_wrapper: "tmp/android/gradlew",
-      keystore_filename: "repebox-release.keystore",
+      keystore_filename: "release.keystore",
       keystore_key_alias: "repebox",
       keystore_validity_days: "100000",
       keystore_password: Cred[:android_keystore_password],
