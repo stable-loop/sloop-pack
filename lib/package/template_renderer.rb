@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require 'erb'
-require 'fileutils'
-require 'pathname'
-require Rails.root.join('config', 'packages', 'config.rb').to_s
+require "erb"
+require "fileutils"
+require "pathname"
+require Rails.root.join("config", "packages", "config.rb").to_s
 
 module Package
   class TemplateRenderer
     def render(target_directory)
       FileUtils.rm_rf(target_directory)
 
-      Dir.glob(Package::TEMPLATE_DIRECTORY.join('**', '*.erb')).each do |template_path|
+      Dir.glob(Package::TEMPLATE_DIRECTORY.join("**", "*.erb")).each do |template_path|
         relative_path = Pathname(template_path).relative_path_from(Package::TEMPLATE_DIRECTORY)
-        output_path = Pathname(target_directory).join(relative_path.to_s.delete_suffix('.erb'))
+        output_path = Pathname(target_directory).join(relative_path.to_s.delete_suffix(".erb"))
         FileUtils.mkdir_p(output_path.dirname)
         File.write(output_path, render_template(template_path))
       end

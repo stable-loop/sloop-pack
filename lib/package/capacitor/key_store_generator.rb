@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'fileutils'
+require "fileutils"
 
 module Package
   module Capacitor
@@ -17,15 +17,15 @@ module Package
       end
 
       def create_keystore
-        sh 'keytool', *keytool_arguments
+        sh "keytool", *keytool_arguments
       end
 
       def keytool_arguments
         [
-          '-genkeypair', '-v', '-keystore', keystore_path, '-storetype', 'JKS',
-          '-storepass', keystore_password, '-keypass', key_password, '-alias', key_alias,
-          '-keyalg', 'RSA', '-keysize', '4096', '-validity', validity_days,
-          '-dname', 'CN=Repebox, OU=Repebox, O=, L=, ST=, C=ES'
+          "-genkeypair", "-v", "-keystore", keystore_path, "-storetype", "JKS",
+          "-storepass", keystore_password, "-keypass", key_password, "-alias", key_alias,
+          "-keyalg", "RSA", "-keysize", "4096", "-validity", validity_days,
+          "-dname", "CN=Repebox, OU=Repebox, O=, L=, ST=, C=ES"
         ]
       end
 
@@ -36,20 +36,20 @@ module Package
         puts "android_keystore_password: #{keystore_password}"
         puts "android_key_password: #{key_password}"
         puts
-        puts 'Store these values in Rails credentials and back up the keystore securely.'
-        puts 'Add secret to Github for Actions:'
+        puts "Store these values in Rails credentials and back up the keystore securely."
+        puts "Add secret to Github for Actions:"
         puts "> gh secret set ANDROID_KEYSTORE_BASE64 < <(base64 -w 0 #{keystore_path})"
       end
 
       private
 
       def validate_configuration
-        abort 'android_keystore_password credential is required' if keystore_password.empty?
-        abort 'android_key_password credential is required' if key_password.empty?
+        abort "android_keystore_password credential is required" if keystore_password.empty?
+        abort "android_key_password credential is required" if key_password.empty?
       end
 
       def capacitor_config = Package::CONFIG.fetch(:capacitor)
-      def keystore_directory = Rails.root.join('config', 'packages')
+      def keystore_directory = Rails.root.join("config", "packages")
       def keystore_password = capacitor_config.fetch(:keystore_password).to_s
       def key_password = capacitor_config.fetch(:keystore_key_password).to_s
       def keystore_path = keystore_directory.join(keystore_filename).to_s

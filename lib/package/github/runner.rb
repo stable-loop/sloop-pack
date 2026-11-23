@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'time'
+require "json"
+require "time"
 
 module Package
   module Github
     class Runner
       include Rake::FileUtilsExt
 
-      BRANCH = 'main'
+      BRANCH = "main"
 
       def initialize(platform)
         @platform = platform
@@ -20,7 +20,7 @@ module Package
 
         puts "GitHub Actions: starting #{workflow} on #{BRANCH}..."
         start_workflow(workflow)
-        puts 'GitHub Actions: waiting for the workflow run...'
+        puts "GitHub Actions: waiting for the workflow run..."
         run_id = find_run(workflow, started_at)
 
         puts "GitHub Actions: watching run ##{run_id}..."
@@ -31,7 +31,7 @@ module Package
       private
 
       def start_workflow(workflow)
-        sh 'gh', 'workflow', 'run', workflow, '--ref', BRANCH
+        sh "gh", "workflow", "run", workflow, "--ref", BRANCH
       end
 
       def find_run(workflow, started_at)
@@ -39,35 +39,35 @@ module Package
           run = find_matching_run(workflow, started_at)
           if run
             puts
-            return run.fetch('databaseId')
+            return run.fetch("databaseId")
           end
           wait_for_run
         end
         puts
 
-        abort 'Could not find the GitHub Actions run'
+        abort "Could not find the GitHub Actions run"
       end
 
       def find_matching_run(workflow, started_at)
         runs_json = IO.popen(
           [
-            'gh', 'run', 'list', '--workflow', workflow, '--branch', BRANCH,
-            '--event', 'workflow_dispatch', '--limit', '10', '--json', 'databaseId,createdAt'
+            "gh", "run", "list", "--workflow", workflow, "--branch", BRANCH,
+            "--event", "workflow_dispatch", "--limit", "10", "--json", "databaseId,createdAt"
           ],
           &:read
         )
         runs = JSON.parse(runs_json)
-        runs.find { |candidate| Time.iso8601(candidate.fetch('createdAt')) >= started_at }
+        runs.find { |candidate| Time.iso8601(candidate.fetch("createdAt")) >= started_at }
       end
 
       def wait_for_run
-        print '.'
+        print "."
         $stdout.flush
         sleep 3
       end
 
       def watch_run(run_id)
-        sh 'gh', 'run', 'watch', run_id.to_s, '--exit-status'
+        sh "gh", "run", "watch", run_id.to_s, "--exit-status"
       end
     end
   end

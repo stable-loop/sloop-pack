@@ -26,14 +26,14 @@ module Package
       FileUtils.mkdir_p(File.dirname(project_directory))
       FileUtils.rm_rf(project_directory)
       FileUtils.cp_r(
-        Package::RENDERED_DIRECTORY.join('tauri'),
+        Package::RENDERED_DIRECTORY.join("tauri"),
         project_directory
       )
     end
 
     def generate_icons
       Dir.chdir(project_directory) do
-        sh 'node', tauri_cli, 'icon', public_icon, '--output', 'icons'
+        sh "node", tauri_cli, "icon", public_icon, "--output", "icons"
       end
     end
 

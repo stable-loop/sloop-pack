@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'fileutils'
-require 'aws-sdk-s3'
-require 'marcel'
-require 'uri'
+require "fileutils"
+require "aws-sdk-s3"
+require "marcel"
+require "uri"
 
 module Package
   class Copier
     def copy_to_public(package_file)
-      public_dir = Rails.root.join('public')
+      public_dir = Rails.root.join("public")
       FileUtils.mkdir_p(public_dir)
       destination = public_dir.join(File.basename(package_file))
       FileUtils.cp(package_file, destination)
@@ -29,13 +29,13 @@ module Package
     def s3_config = Package::CONFIG.fetch(:s3)
 
     def upload_package(package_file, key)
-      File.open(package_file, 'rb') do |file|
+      File.open(package_file, "rb") do |file|
         s3_client.put_object(
           bucket: s3_config.fetch(:bucket),
           key: key,
           body: file,
           content_type: Marcel::MimeType.for(package_file),
-          acl: 'public-read'
+          acl: "public-read"
         )
       end
     end
